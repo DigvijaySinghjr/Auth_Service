@@ -2,6 +2,11 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcrypt'); 
+
+const { SALT } = require('../config/serverConfig');
+
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -32,5 +37,24 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
   });
+
+  User.beforeCreate( (user)=> {                 //it's a hook
+    const encryptedPassword = bcrypt.hashSync(user.password, SALT);
+    user.password = encryptedPassword;
+  });
+
   return User;
 };
+
+//bcrypt.hashSync() is not good because it blocks main event loop so we should use hash(with a promised base syntax )
+/*
+example:
+async function hashUserPassword(user) {
+    const encryptedPassword = await bcrypt.hash(user.password, 10);
+    user.password = encryptedPassword;
+}
+*/ 
+
+
+
+
