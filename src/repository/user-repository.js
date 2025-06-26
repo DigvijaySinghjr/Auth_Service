@@ -1,4 +1,5 @@
 const { User } = require('../models/index');
+const { where } = require('sequelize');
 
 class UserRepository {
 
@@ -19,6 +20,7 @@ class UserRepository {
                     id: userId
                 }
             });
+            return true;
         } catch (error) {
             console.log("something wenet wrong on repositoory layer");
             throw error;
@@ -37,6 +39,21 @@ class UserRepository {
         }
     }
 
+    async getByEmail(userEmail){
+        try {
+            const user = await User.findOne({where: {
+                email: userEmail
+            }});
+            return user;
+        } catch (error) {
+            console.log("something wenet wrong on repositoory layer");
+            throw error;
+        }
+    }
+
 }
 
 module.exports = UserRepository;
+
+
+
