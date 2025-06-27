@@ -7,6 +7,7 @@ const validateUserAuth = (req, res, next) => {
             err: 'Missing mandatory properties to login or signup'
        });
     }
+    next();        //next() means proceed to the next middleware or route handler in the Express request-response cycle.
 }
 
 
