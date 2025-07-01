@@ -1,4 +1,4 @@
-const { User } = require('../models/index');
+const { User, Role } = require('../models/index');
 const { where } = require('sequelize');
 
 class UserRepository {
@@ -51,6 +51,20 @@ class UserRepository {
         }
     }
 
+    async isAdmin(userId){
+        try {
+            const user = await User.findByPk(userId);
+            const adminRole = await Role.findOne({
+                where: {
+                    name: 'ADMIN'
+                }
+            });
+            return user.hasRole(adminRole)
+        } catch (error) {
+            console.log("something wenet wrong on repositoory layer");
+            throw error;
+        }
+    }
 }
 
 module.exports = UserRepository;
